@@ -1,16 +1,12 @@
 
 
-#importing the required libraries
 import cv2
 import numpy as np
 from keras.preprocessing import image
 from keras.models import model_from_json
 import face_recognition
 
-#capture the video from default camera 
 
-
-#load the model and load the weights
 face_exp_model = model_from_json(open("dataset/facial_expression_model_structure.json","r").read())
 face_exp_model.load_weights('dataset/facial_expression_model_weights.h5')
 #declare the emotions label
@@ -19,18 +15,9 @@ emotions_label = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutr
 
 #initialize the array variable to hold all face locations in the frame
 all_face_locations = []
-
-#loop through every frame in the video
-
-    #get the current frame from the video stream as an image
 current_frame = cv2.imread("happy.jpg")
-    #resize the current frame to 1/4 size to proces faster
 current_frame_small = cv2.resize(current_frame,(0,0),fx=0.25,fy=0.25)
-    #detect all faces in the image
-    #arguments are image,no_of_times_to_upsample, model
 all_face_locations = face_recognition.face_locations(current_frame_small,number_of_times_to_upsample=2,model='hog')
-    
-    #looping through the face locations
 for index,current_face_location in enumerate(all_face_locations):
         #splitting the tuple to get the four position values of current face
         top_pos,right_pos,bottom_pos,left_pos = current_face_location
@@ -73,7 +60,7 @@ for index,current_face_location in enumerate(all_face_locations):
         cv2.putText(current_frame, emotion_label, (left_pos,bottom_pos), font, 0.5, (255,255,255),1)
         
     #showing the current face with rectangle drawn
-cv2.imshow("Webcam Video",current_frame)
+cv2.imshow("Image",current_frame)
 cv2.waitKey(0);
 #release the stream and cam
 #close all opencv windows open
